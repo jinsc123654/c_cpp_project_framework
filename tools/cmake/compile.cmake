@@ -312,7 +312,7 @@ macro(project name)
                             --env "PROJECT_PATH=${PROJECT_SOURCE_DIR}"
                             --env "CUSTOM_COMPONENTS_PATH=${CUSTOM_COMPONENTS_PATH}"
                             --env "BUILD_TYPE=${CMAKE_BUILD_TYPE}"
-                            --output makefile ${PROJECT_BINARY_DIR}/config/global_config.mk
+                            --output makefile ${PROJECT_SOURCE_DIR}/global_config.mk
                             --output cmake  ${PROJECT_BINARY_DIR}/config/global_config.cmake
                             --output header ${PROJECT_BINARY_DIR}/config/global_config.h
                             )
@@ -324,7 +324,7 @@ macro(project name)
                             --env "PROJECT_PATH=${PROJECT_SOURCE_DIR}"
                             --env "CUSTOM_COMPONENTS_PATH=${CUSTOM_COMPONENTS_PATH}"
                             --env "BUILD_TYPE=${CMAKE_BUILD_TYPE}"
-                            --output makefile ${PROJECT_BINARY_DIR}/config/global_config.mk
+                            --output makefile ${PROJECT_SOURCE_DIR}/global_config.mk
                             --output cmake  ${PROJECT_BINARY_DIR}/config/global_config.cmake
                             --output header ${PROJECT_BINARY_DIR}/config/global_config.h
                             )

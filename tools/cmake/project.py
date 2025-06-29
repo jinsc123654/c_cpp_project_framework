@@ -178,8 +178,8 @@ if "CONFIG_CMAKE_GENERATOR" not in configs or not configs["CONFIG_CMAKE_GENERATO
     print('no generator set, will use "Unix Makefiles" as default')
 if configs != configs_old:
     dump_config_mk(configs, config_filename)
-    if os.path.exists("build/config/global_config.mk"):
-        os.remove("build/config/global_config.mk")
+    if os.path.exists("build/config/../../global_config.mk"):
+        os.remove("build/config/../../global_config.mk")
     print("generate config file at: {}".format(config_filename))
 
 if project_args.build_type:
@@ -282,7 +282,7 @@ elif project_args.cmd == "menuconfig":
     cmd.extend(["--env", f"SDK_PATH={sdk_path}"])
     cmd.extend(["--env", f"PROJECT_PATH={project_path}"])
     cmd.extend(["--env", f"BUILD_TYPE={build_type}"])
-    cmd.extend(["--output", "makefile", os.path.join(config_out_path, "global_config.mk")])
+    cmd.extend(["--output", "makefile", os.path.join(config_out_path, "../../global_config.mk")])
     cmd.extend(["--output", "cmake", os.path.join(config_out_path, "global_config.cmake")])
     cmd.extend(["--output", "header", os.path.join(config_out_path, "global_config.h")])
     res = subprocess.call(cmd)
@@ -325,7 +325,7 @@ elif project_args.cmd == "menuconfig":
     cmd.extend(["--menuconfig", "True", "--env", "SDK_PATH={}".format(sdk_path),
                                         "--env", "PROJECT_PATH={}".format(project_path),
                                         "--env", "BUILD_TYPE={}".format(build_type)])
-    cmd.extend(["--output", "makefile", os.path.join(config_out_path, "global_config.mk")])
+    cmd.extend(["--output", "makefile", os.path.join(config_out_path, "../../global_config.mk")])
     cmd.extend(["--output", "cmake", os.path.join(config_out_path, "global_config.cmake")])
     cmd.extend(["--output", "header", os.path.join(config_out_path, "global_config.h")])
     res = subprocess.call(cmd)
