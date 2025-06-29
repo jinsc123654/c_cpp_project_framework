@@ -178,8 +178,8 @@ if "CONFIG_CMAKE_GENERATOR" not in configs or not configs["CONFIG_CMAKE_GENERATO
     print('no generator set, will use "Unix Makefiles" as default')
 if configs != configs_old:
     dump_config_mk(configs, config_filename)
-    if os.path.exists("build/config/global_config.mk"):
-        os.remove("build/config/global_config.mk")
+    if os.path.exists("build/config/../../global_config.mk"):
+        os.remove("build/config/../../global_config.mk")
     print("generate config file at: {}".format(config_filename))
 
 if project_args.build_type:
@@ -266,6 +266,31 @@ elif project_args.cmd == "distclean":
 # menuconfig
 elif project_args.cmd == "menuconfig":
     time_start = time.time()
+    config_out_path = os.path.abspath("build/config")
+    if not os.path.exists(config_out_path):
+        os.makedirs(config_out_path)
+    tool_path = os.path.join(sdk_path, "tools/kconfig/genconfig.py")
+    if not os.path.exists(tool_path):
+        print("[ERROR] kconfig tool not found:", tool_path)
+        exit(1)
+    cmd = [sys.executable, tool_path, "--kconfig", os.path.join(sdk_path, "Kconfig")]
+    if os.path.exists("build/.config"):
+        config_path = os.path.abspath("build/.config")
+        cmd.extend(["--defaults", config_path])
+    else:
+        print("[WARN] no .config found, using fallback")
+    cmd.extend(["--env", f"SDK_PATH={sdk_path}"])
+    cmd.extend(["--env", f"PROJECT_PATH={project_path}"])
+    cmd.extend(["--env", f"BUILD_TYPE={build_type}"])
+    cmd.extend(["--output", "makefile", os.path.join(config_out_path, "../../global_config.mk")])
+    cmd.extend(["--output", "cmake", os.path.join(config_out_path, "global_config.cmake")])
+    cmd.extend(["--output", "header", os.path.join(config_out_path, "global_config.h")])
+    res = subprocess.call(cmd)
+    if res != 0:
+        print("[ERROR] genconfig failed, check .config and Kconfig")
+        exit(1)
+    else:
+        print("-- Regenerated config header and make/cmake files from .config")
     if not os.path.exists("build"):
         os.mkdir("build")
     os.chdir("build")
@@ -300,7 +325,7 @@ elif project_args.cmd == "menuconfig":
     cmd.extend(["--menuconfig", "True", "--env", "SDK_PATH={}".format(sdk_path),
                                         "--env", "PROJECT_PATH={}".format(project_path),
                                         "--env", "BUILD_TYPE={}".format(build_type)])
-    cmd.extend(["--output", "makefile", os.path.join(config_out_path, "global_config.mk")])
+    cmd.extend(["--output", "makefile", os.path.join(config_out_path, "../../global_config.mk")])
     cmd.extend(["--output", "cmake", os.path.join(config_out_path, "global_config.cmake")])
     cmd.extend(["--output", "header", os.path.join(config_out_path, "global_config.h")])
     res = subprocess.call(cmd)
